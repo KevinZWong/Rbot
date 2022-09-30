@@ -8,7 +8,7 @@ from gtts import gTTS
 from playsound import playsound  
   
 # It is a text value that we want to convert to audio  
-text_val = 'In this tutorial, we will learn how to convert the human language text into human-like speech. Sometimes we prefer listening to the content instead of reading. We can do multitasking while listening to the critical file data. Python provides many APIs to convert text to speech. The Google Text to Speech API is popular and commonly known as the gTTS API. It is very easy to use the tool and provides many built-in functions which used to save the text file as an mp3 file.'  
+text_val = 'Offline Testing'  
   
 # Here are converting in English Language  
 language = 'en'  

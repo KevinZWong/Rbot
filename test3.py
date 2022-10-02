@@ -1,4 +1,7 @@
-list1 = ["hi", "there"]
+import pyttsx3
 
-if ("there" in list1):
-    print("hi")
+engine = pyttsx3.init()
+voices = engine.getProperty('voices')
+engine.setProperty('voice', voices[1].id)
+engine.say("testing 1 2 3")
+engine.runAndWait()

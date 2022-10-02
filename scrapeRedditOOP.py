@@ -36,6 +36,34 @@ class ScrapReddit:
             returnValues.append(postList[i])
         return returnValues
 
+    def replaceWords(self, search, replacement, wordsString):
+        wordsList = wordsString.split()
+        if search in wordsList:
+            print("found something")
+            
+            for i, v in enumerate(wordsList):
+                if v == search:
+                    wordsList[i] = replacement
         
 
+        else:
+            print("No insatnce of", search, "found, returned original list" )
+            return wordsString
 
+                
+        #print("wordsString: ", wordsString)
+        #print("wordsList: ", wordsList)
+        returnValue = ""
+        for i in wordsList:
+            returnValue += i
+        return returnValue
+
+
+def main():  
+    obj1 = ScrapReddit()
+    search = "TIFU,"
+    replacement = "testing up,"
+    wordsString = "TIFU, hello"
+    print(obj1.replaceWords(search, replacement, wordsString))
+
+main()

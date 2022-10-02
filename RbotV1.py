@@ -1,4 +1,6 @@
+from typing import Text
 from scrapeRedditOOP import ScrapReddit
+from TextToVoiceOOP import TextToVoice
 import praw
 import json
 
@@ -22,7 +24,7 @@ class Rbot:
             data.append(i.title)
             data.append(i.selftext)
             postList.append(data)
-        print("postList", type(postList))
+        #print("postList", type(postList))
   
         #postList = [["[Mod Post] post0", "post0 content"],["[Breaking News] post1", "post1 content"],["post2", "post2 content"],["post3", "post3 content"],["post4", "post4 content"]]
 
@@ -35,11 +37,19 @@ class Rbot:
         return postList
 
 
-Obj1 = Rbot()
+RedditData = Rbot()
 SubRedditName = "TIFU"
-NumPosts = 3
-data = Obj1.ScrapeData(SubRedditName, NumPosts)
-print(data)
+NumPosts = 1
+
+# data = [ ["title", "story"] , ["title", "story"] ]
+data = RedditData.ScrapeData(SubRedditName, NumPosts)
+
+TextToVoice1 = TextToVoice()
+print(TextToVoice1.getRate() )
+TextToVoice1.convert_T2V( data[0][1], "story")
+
+
+#print(data)
 
 
 

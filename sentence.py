@@ -1,15 +1,8 @@
-
-
 rawinput = "hithere"
-
-
-
-
 rawinput += " "
-wordList = ["hi", "there", "how", "are", "you", "doing", "it", "the", "ware", "do", "in", "is"]
+wordList = ["hi", "there", "how", "are", "you", "doing", "it", "the", "ware", "do", "in", "is", "register"]
 
 rawChar = list(rawinput)
-
 
 testcase = ""
 Sentence = []

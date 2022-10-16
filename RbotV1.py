@@ -53,8 +53,10 @@ today = date.today()
 now = datetime.now()
 current_time = now.strftime("%H:%M:%S")
 print("Current Time =", current_time)
-
-TextToVoice1.convert_T2V( data[0][1], "story_" + str(current_time) + " " + str(today) )
+name =  "story_" + str(current_time) + " " + str(today) 
+print("name = ", name)
+print("name = ", type(name))
+TextToVoice1.convert_T2V( data[0][1], name)
 
 
 #print(data)

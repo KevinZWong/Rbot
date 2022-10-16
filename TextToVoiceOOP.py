@@ -1,4 +1,5 @@
 
+from subprocess import list2cmdline
 import pyttsx3
 
 class TextToVoice:
@@ -26,22 +27,38 @@ class TextToVoice:
 
 
     def convert_T2V(self, text, filename): # gender: 0 male, 1 female
-        print('rate', self.rate)
+        def CheckForFileType(filename):
+            listFileName = list(filename)
+            listFileName = listFileName[::-1]
+            last4 = ""
+            try:
+                for i in range(0, 4, 1):
+                    last4 += listFileName[i]
+                print("last4:",last4)
+                if last4 != "3pm.":
+                    return filename + ".mp3"
+                else:
+                    return filename
+            except:
+                return filename + ".mp3"
+        def SwapChacters(str1,remove, replace):
+            listStr = list(str1)
+            returnStr = ""
+            for i,v in enumerate(listStr):
+                if (v == remove):
+                    listStr[i] = replace
+                returnStr += listStr[i]
+            return returnStr
+            
+
+
         voices = self.engine.getProperty('voices')
         self.engine.setProperty('voice', voices[self.gender].id)
         self.engine.setProperty('rate', self.rate)
         self.engine.setProperty('volume', self.volume)
-
-        listFileName = list(filename)
-        listFileName = listFileName[::-1]
-        last4 = ""
-        for i in range(0, 4, 1):
-            last4 += listFileName[i]
-
-        if last4 != ".mp3":
-            self.engine.save_to_file(text, filename + ".mp3")
-        else:
-            self.engine.save_to_file(text, filename)
+        filename = SwapChacters(filename,':', '_')
+        self.engine.save_to_file(text, CheckForFileType(filename))
+        
             
         # Wait until above command is not finished.
         self.engine.runAndWait()

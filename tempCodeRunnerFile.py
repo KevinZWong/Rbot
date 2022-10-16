@@ -1,1 +1,2 @@
-nt("hi")
+
+# data = [ ["title", "story"] , ["title", "story"] ]

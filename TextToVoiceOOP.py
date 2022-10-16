@@ -26,7 +26,7 @@ class TextToVoice:
 
 
     def convert_T2V(self, text, filename): # gender: 0 male, 1 female
-
+        print('rate', self.rate)
         voices = self.engine.getProperty('voices')
         self.engine.setProperty('voice', voices[self.gender].id)
         self.engine.setProperty('rate', self.rate)

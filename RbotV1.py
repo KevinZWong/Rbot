@@ -3,7 +3,8 @@ from scrapeRedditOOP import ScrapReddit
 from TextToVoiceOOP import TextToVoice
 import praw
 import json
-
+from datetime import date
+from datetime import datetime
 
 class Rbot:
     def __init__(self):
@@ -38,6 +39,7 @@ class Rbot:
 
 
 RedditData = Rbot()
+
 SubRedditName = "TIFU"
 NumPosts = 1
 
@@ -45,12 +47,17 @@ NumPosts = 1
 data = RedditData.ScrapeData(SubRedditName, NumPosts)
 
 TextToVoice1 = TextToVoice()
+
 print(TextToVoice1.getRate() )
-TextToVoice1.convert_T2V( data[0][1], "story")
+today = date.today()
+now = datetime.now()
+current_time = now.strftime("%H:%M:%S")
+print("Current Time =", current_time)
+
+TextToVoice1.convert_T2V( data[0][1], "story_" + str(current_time) + " " + str(today) )
 
 
 #print(data)
-
 
 
 ''' 

@@ -8,14 +8,14 @@ class TextToVoice:
 
         self.Subbreddit = ""
         self.engine = pyttsx3.init()
-        self.gender = 0
-        self.rate = 2
+        self.voiceType = 1
+        self.rate = 178
         self.volume = 230
     
-    def getGender(self):
-        return self.gender
-    def setGender(self, gender): # 0 male, 1 female
-        self.gender = gender
+    def getvoiceType(self):
+        return self.voiceType
+    def setVoiceType(self, voiceType): 
+        self.voiceType = voiceType
     def getRate(self):
         return self.rate
     def setRate(self, rate): 
@@ -26,7 +26,7 @@ class TextToVoice:
         self.volume = volume
 
 
-    def convert_T2V(self, text, filename): # gender: 0 male, 1 female
+    def convert_T2V(self, text, filename): # voiceType
         def CheckForFileType(filename):
             listFileName = list(filename)
             listFileName = listFileName[::-1]
@@ -53,11 +53,12 @@ class TextToVoice:
 
 
         voices = self.engine.getProperty('voices')
-        self.engine.setProperty('voice', voices[self.gender].id)
+        self.engine.setProperty('voice', voices[self.voiceType].id)
         self.engine.setProperty('rate', self.rate)
         self.engine.setProperty('volume', self.volume)
         filename = SwapChacters(filename,':', '_')
-        self.engine.save_to_file(text, CheckForFileType(filename))
+        filename = "C:\\Users\\14088\\Desktop\\Rbot\\VoiceFiles\\" + CheckForFileType(filename)
+        self.engine.save_to_file(text, filename)
         
             
         # Wait until above command is not finished.

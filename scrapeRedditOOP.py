@@ -8,9 +8,7 @@ class ScrapReddit:
 
     def set_Subreddit(self, SubReddit):
         self.Subbreddit = SubReddit
-        print("in setreddit")
     def get_Subreddit(self):
-        print("in getreddit")
         return self.Subbreddit
     def removePost(self, postList, target):
         returnIndexs = []
@@ -35,11 +33,12 @@ class ScrapReddit:
         for i in returnIndexs:
             returnValues.append(postList[i])
         return returnValues
+        
 
     def replaceWords(self, search, replacement, wordsString):
         wordsList = wordsString.split()
         if search in wordsList:
-            print("found something")
+            #print("found something")
             
             for i, v in enumerate(wordsList):
                 if v == search:
@@ -47,7 +46,7 @@ class ScrapReddit:
         
 
         else:
-            print("No insatnce of", search, "found, returned original list" )
+            #print("No insatnce of", search, "found, returned original list" )
             return wordsString
 
                 
@@ -59,6 +58,30 @@ class ScrapReddit:
         return returnValue
 
 
+    def replaceCharacters(self, search, replacement, wordsString): #USE WITH CAUTION
+        wordsChar = list(wordsString)
+        searchChar = list(search)
+        index = 0
+        wordsFoundCounter = 0
+
+        finalReturn = ""
+        potential = ""
+        for i,v in enumerate(wordsChar):
+            if searchChar[index] == v:
+                index += 1
+                potential += ""
+            else:
+                index = 0
+                finalReturn += v
+            if len(searchChar) == index:
+                wordsFoundCounter += 1
+                finalReturn += replacement
+                potential= ""
+                index = 0
+        return finalReturn
+            
+
+
 def main():  
     obj1 = ScrapReddit()
     search = "TIFU,"
@@ -66,4 +89,4 @@ def main():
     wordsString = "TIFU, hello"
     print(obj1.replaceWords(search, replacement, wordsString))
 
-main()
+#main()

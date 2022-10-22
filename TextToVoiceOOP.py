@@ -34,7 +34,6 @@ class TextToVoice:
             try:
                 for i in range(0, 4, 1):
                     last4 += listFileName[i]
-                print("last4:",last4)
                 if last4 != "3pm.":
                     return filename + ".mp3"
                 else:

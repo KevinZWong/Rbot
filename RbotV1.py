@@ -32,31 +32,58 @@ class Rbot:
         postList = post.removePost(postList, "[Mod Post]")
         postList = post.removePost(postList, "[Breaking News]")
 
+        for i in range(0, len(postList)):
+            postList[i][1] = post.replaceCharacters("\n", " ", postList[i][1])
+
+
+
+        print("Created: ", DataFileName)
         with open(DataFileName, 'w') as f:
             json.dump(postList, f)
 
         return postList
 
+    def CreateAudioFileName(self):
+        today = date.today()
+        now = datetime.now()
+        current_time = now.strftime("%H:%M:%S")
+        return "story_" + str(current_time) + " " + str(today) 
+
 
 RedditData = Rbot()
 
-SubRedditName = "TIFU"
-NumPosts = 1
+SubRedditName = "confessions"
+NumPosts = 10
 
 # data = [ ["title", "story"] , ["title", "story"] ]
 data = RedditData.ScrapeData(SubRedditName, NumPosts)
 
-TextToVoice1 = TextToVoice()
 
-print(TextToVoice1.getRate() )
-today = date.today()
-now = datetime.now()
-current_time = now.strftime("%H:%M:%S")
-print("Current Time =", current_time)
-name =  "story_" + str(current_time) + " " + str(today) 
-print("name = ", name)
-print("name = ", type(name))
-TextToVoice1.convert_T2V( data[0][1], name)
+TextToVoice1 = TextToVoice()
+AudioFileName = RedditData.CreateAudioFileName()
+print("Created", AudioFileName)
+TextToVoice1.convert_T2V( data[0][1], AudioFileName)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #print(data)

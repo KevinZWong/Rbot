@@ -24,25 +24,27 @@ class TextToVoice:
         return self.volume
     def setVolume(self, volume): 
         self.volume = volume
-
+    def CheckForFileType(self, filename, tag):
+        listFileName = list(filename)
+        listFileName = listFileName[::-1]
+        last4 = ""
+        reverseTag = tag[::-1]
+        try:
+            for i in range(0, 4, 1):
+                last4 += listFileName[i]
+            if last4 != reverseTag:
+                return filename + tag
+            else:
+                return filename
+        except:
+            return filename + tag
 
     def convert_T2V(self, text, filename): # voiceType
-        def CheckForFileType(filename):
-            listFileName = list(filename)
-            listFileName = listFileName[::-1]
-            last4 = ""
-            try:
-                for i in range(0, 4, 1):
-                    last4 += listFileName[i]
-                if last4 != "3pm.":
-                    return filename + ".mp3"
-                else:
-                    return filename
-            except:
-                return filename + ".mp3"
+
         def SwapChacters(str1,remove, replace):
             listStr = list(str1)
             returnStr = ""
+
             for i,v in enumerate(listStr):
                 if (v == remove):
                     listStr[i] = replace
@@ -56,7 +58,7 @@ class TextToVoice:
         self.engine.setProperty('rate', self.rate)
         self.engine.setProperty('volume', self.volume)
         filename = SwapChacters(filename,':', '_')
-        filename = "C:\\Users\\14088\\Desktop\\Rbot\\VoiceFiles\\" + CheckForFileType(filename)
+        filename = "C:\\Users\\14088\\Desktop\\Rbot\\VoiceFiles\\" + self.CheckForFileType(filename, ".mp3")
         self.engine.save_to_file(text, filename)
         
             

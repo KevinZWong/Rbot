@@ -1,11 +1,12 @@
 from typing import Text
 from scrapeRedditOOP import ScrapReddit
 from TextToVoiceOOP import TextToVoice
+from moviePyOOP import VideoGenerator
 import praw
 import json
 from datetime import date
 from datetime import datetime
-
+import time
 class Rbot:
     def __init__(self):
         pass
@@ -52,19 +53,71 @@ class Rbot:
 
 RedditData = Rbot()
 
-SubRedditName = "confessions"
-NumPosts = 10
+SubRedditName = "TrueOffMyChest"
+NumPosts = 2
 
 # data = [ ["title", "story"] , ["title", "story"] ]
 data = RedditData.ScrapeData(SubRedditName, NumPosts)
 
+script = []
+for i in range(1, len(data)):
+    script.append(data[i][0]) # appending title as an element
+    wordsList = data[i][1].split()
+    counter = 0
+    AppendList = []
+    for j,v in enumerate(wordsList):
+        AppendList.append(v)
+        if counter == 10 or j == len(wordsList)-1:
+            
+            appendStr = ""
+            for x in AppendList:
+                appendStr += x + " "  
+            print("appendStr", appendStr)
+            script.append(appendStr)
+            AppendList = []
+            appendStr = ""
 
-TextToVoice1 = TextToVoice()
-AudioFileName = RedditData.CreateAudioFileName()
-print("Created", AudioFileName)
-TextToVoice1.convert_T2V( data[0][1], AudioFileName)
+            counter = 0
+        counter += 1
+    print("script", script)
 
 
+    for j,v in enumerate(script):
+        TextToVoice1 = TextToVoice()
+        VideoGenerator1 = VideoGenerator()
+        VideoGenerator1.imageFromText(v,  "image"+ str(i) +"_"+ str(j))
+        TextToVoice1.convert_T2V( v, "script"+ str(i) +"_"+ str(j))
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'''
+for i in range(0, len(data)):
+    time.sleep(1)
+    TextToVoice1 = TextToVoice()
+    AudioFileName = RedditData.CreateAudioFileName()
+    print("Created", AudioFileName)
+    TextToVoice1.convert_T2V( data[i][1], AudioFileName)
+
+'''
 
 
 

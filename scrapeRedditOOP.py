@@ -84,7 +84,7 @@ class ScrapReddit:
 
 def main():  
     obj1 = ScrapReddit()
-    search = "TIFU,"
+    search = "TrueOffMyChest,"
     replacement = "testing up,"
     wordsString = "TIFU, hello"
     print(obj1.replaceWords(search, replacement, wordsString))

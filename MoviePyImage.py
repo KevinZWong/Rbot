@@ -5,7 +5,7 @@ story1 = "This is very confusing to me and I wish I didn\u2019t have it but it\u
 
 text_clip = TextClip(txt=story1,
                         # fontsize=40,
-                        size=(0, 0),
+                        size=(1080,1920),
                         font="Lane",
                         color="White",
                         bg_color="black")

@@ -12,7 +12,7 @@ class Rbot:
         pass
 
     def ScrapeData(self, SubRedditName, NumPosts):
-        DataFileName = "Reddit_" + SubRedditName + "_Data.json"
+        DataFileName = "C:\\Users\\14088\\Desktop\\Rbot\\ScriptFiles\\" + "Reddit_" + SubRedditName + "_Data.json"
         reddit_read_only = praw.Reddit(client_id="1LUhfALD3uJgbBeFVFMOGQ",         # your client id
                                     client_secret="46QJC2mttPTyOY7DwzlOdkP1nxYNqw",      # your client secret
                                     user_agent="Rbot")        # your user agent
@@ -53,15 +53,36 @@ class Rbot:
 
 RedditData = Rbot()
 
-SubRedditName = "TrueOffMyChest"
-NumPosts = 2
+SubRedditName = "TIFU"
+NumPosts = 1
 
 # data = [ ["title", "story"] , ["title", "story"] ]
 data = RedditData.ScrapeData(SubRedditName, NumPosts)
 
 script = []
-for i in range(1, len(data)):
-    script.append(data[i][0]) # appending title as an element
+for i in range(0, len(data)):
+    
+
+    title = data[i][0]
+    title = title.split()
+    titleWordCounter = 0
+    FinalTitle = ""
+    for j,v in enumerate(title):
+        if titleWordCounter == 5 or v == len(title)-1:
+            FinalTitle += "\n"
+            titleWordCounter = 0
+        FinalTitle += v + " "
+        titleWordCounter += 1
+
+    print("Title",title)
+
+
+
+    script.append(FinalTitle) # appending title as an element
+
+
+
+    print(i)
     wordsList = data[i][1].split()
     counter = 0
     AppendList = []
@@ -72,24 +93,43 @@ for i in range(1, len(data)):
             appendStr = ""
             for x in AppendList:
                 appendStr += x + " "  
-            print("appendStr", appendStr)
             script.append(appendStr)
             AppendList = []
             appendStr = ""
 
             counter = 0
+        if counter == 5:
+            AppendList.append("\n")
+
         counter += 1
-    print("script", script)
 
-
+    imageNameList = []
+    audiofileName = []
+    TextToVoice1 = TextToVoice()
+    VideoGenerator1 = VideoGenerator()
     for j,v in enumerate(script):
-        TextToVoice1 = TextToVoice()
-        VideoGenerator1 = VideoGenerator()
+
+
+        imageNameList.append("image"+ str(i) +"_"+ str(j))
+        audiofileName.append("script"+ str(i) +"_"+ str(j))
         VideoGenerator1.imageFromText(v,  "image"+ str(i) +"_"+ str(j))
         TextToVoice1.convert_T2V( v, "script"+ str(i) +"_"+ str(j))
     
+    audioFilePath = "C:\\Users\\14088\\Desktop\\Rbot\\VoiceFiles\\"
+    imageFilePath = "C:\\Users\\14088\\Desktop\\Rbot\\ImageFiles\\"
+    videoFilePath = "C:\\Users\\14088\\Desktop\\Rbot\\VideoFiles\\"
+    '''
+    for j in range(0, len(imageNameList)):
 
+        print(VideoGenerator1.getLengthAudioFile(audioFilePath + audiofileName[j] + ".mp3"))
 
+    '''
+    videoFilesList = []
+    for j in range(0, len(imageNameList)):
+        videoFilesList.append(videoFilePath + "video"+ str(j) + ".mp4")
+        VideoGenerator1.add_static_image_to_audio( imageFilePath + imageNameList[j] + ".png", audioFilePath + audiofileName[j] + ".mp3", videoFilePath + "video"+ str(j) + ".mp4")
+
+    VideoGenerator1.conbineAllVideos(videoFilesList, "C:\\Users\\14088\\Desktop\\Rbot\\FinishedVideos_tiktok\\tiktok" + str(i+1) + ".mp4")
 
 
 

@@ -7,6 +7,8 @@ import json
 from datetime import date
 from datetime import datetime
 import time
+import os
+import glob
 class Rbot:
     def __init__(self):
         pass
@@ -37,7 +39,6 @@ class Rbot:
             postList[i][1] = post.replaceCharacters("\n", " ", postList[i][1])
 
 
-
         print("Created: ", DataFileName)
         with open(DataFileName, 'w') as f:
             json.dump(postList, f)
@@ -53,9 +54,8 @@ class Rbot:
 
 RedditData = Rbot()
 
-SubRedditName = "TIFU"
-NumPosts = 1
-
+SubRedditName = "poker"
+NumPosts = 2
 # data = [ ["title", "story"] , ["title", "story"] ]
 data = RedditData.ScrapeData(SubRedditName, NumPosts)
 
@@ -130,9 +130,19 @@ for i in range(0, len(data)):
         VideoGenerator1.add_static_image_to_audio( imageFilePath + imageNameList[j] + ".png", audioFilePath + audiofileName[j] + ".mp3", videoFilePath + "video"+ str(j) + ".mp4")
 
     VideoGenerator1.conbineAllVideos(videoFilesList, "C:\\Users\\14088\\Desktop\\Rbot\\FinishedVideos_tiktok\\tiktok" + str(i+1) + ".mp4")
+    # PRUGE ALL FILES CREATED
 
 
+    files = glob.glob('C:\\Users\\14088\\Desktop\\Rbot\\VideoFiles\\*')
+    for f in files:
+        os.remove(f)
+    files = glob.glob('C:\\Users\\14088\\Desktop\\Rbot\\VoiceFiles\\*')
+    for f in files:
+        os.remove(f)
 
+    files = glob.glob('C:\\Users\\14088\\Desktop\\Rbot\\ImageFiles\\*')
+    for f in files:
+        os.remove(f)
 
 
 

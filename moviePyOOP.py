@@ -9,7 +9,7 @@ class VideoGenerator:
         self.size = (1080,1920)
         self.font="Lane"
         self.color="White"
-        self.bg_color="black" 
+        self.bg_color="green" 
         self.fontsize=60
     def getFontsize(self):
         return self.fontsize
@@ -51,7 +51,7 @@ class VideoGenerator:
                              color = self.color,
                              bg_color = self.bg_color)
         accessCheckForFileType = TextToVoice()
-        imageName = accessCheckForFileType.CheckForFileType("C:\\Users\\14088\\Desktop\\Rbot\\ImageFiles\\" + imageName, ".png")
+        imageName = accessCheckForFileType.CheckForFileType("ImageFiles\\" + imageName, ".png")
         text_clip.save_frame(imageName)
 
 
@@ -77,7 +77,7 @@ class VideoGenerator:
 def main():
     video1 = VideoGenerator()
     
-    audioFilePath = "C:\\Users\\14088\\Desktop\\Rbot\\VoiceFiles\\"
-    imageFilePath = "C:\\Users\\14088\\Desktop\\Rbot\\ImageFiles\\"
-    videoFilePath = "C:\\Users\\14088\\Desktop\\Rbot\\VideoFiles\\"
+    audioFilePath = "VoiceFiles\\"
+    imageFilePath = "ImageFiles\\"
+    videoFilePath = "VideoFiles\\"
     video1.add_static_image_to_audio( audioFilePath + "script0_0.mp3", imageFilePath + "image0_0.png", videoFilePath + "testvideo1.mp4")

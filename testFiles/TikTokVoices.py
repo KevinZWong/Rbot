@@ -255,4 +255,4 @@ if __name__ == "__main__":
 
 
 
-    #py TikTokVoices.py -v en_us_006 -t "hello there" -f TikTokTest.mp3 -s 0c0991424159487e770cc856fb01d824 -p
+    #python TikTokVoices.py -v en_us_006 -t "hello there" -s 0c0991424159487e770cc856fb01d824 -p

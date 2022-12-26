@@ -58,7 +58,7 @@ class TextToVoice:
         self.engine.setProperty('rate', self.rate)
         self.engine.setProperty('volume', self.volume)
         filename = SwapChacters(filename,':', '_')
-        filename = "C:\\Users\\14088\\Desktop\\Rbot\\VoiceFiles\\" + self.CheckForFileType(filename, ".mp3")
+        filename = "VoiceFiles\\" + self.CheckForFileType(filename, ".mp3")
         self.engine.save_to_file(text, filename)
         
             

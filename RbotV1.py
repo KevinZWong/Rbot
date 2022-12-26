@@ -14,7 +14,24 @@ class Rbot:
         pass
 
     def ScrapeData(self, SubRedditName, NumPosts):
-        DataFileName = "C:\\Users\\14088\\Desktop\\Rbot\\ScriptFiles\\" + "Reddit_" + SubRedditName + "_Data.json"
+        askCorrectDirectory = input("Confirm that your current directory is /Rbot/? y/n")
+        if askCorrectDirectory == "y":
+            if not(os.path.exists("ScriptFiles")):
+                os.mkdir("ScriptFiles")
+            if not(os.path.exists("VoiceFiles")):
+                os.mkdir("VoiceFiles")
+            if not(os.path.exists("ImageFiles")):
+                os.mkdir("ImageFiles")
+            if not(os.path.exists("VideoFiles")):
+                os.mkdir("VideoFiles")
+            if not(os.path.exists("FinishedVideos_tiktok")):
+                os.mkdir("FinishedVideos_tiktok")
+        else:
+            print("Cahnge your file location stuppid")
+            quit()
+
+
+        DataFileName = "ScriptFiles\\" + "Reddit_" + SubRedditName + "_Data.json"
         reddit_read_only = praw.Reddit(client_id="1LUhfALD3uJgbBeFVFMOGQ",         # your client id
                                     client_secret="46QJC2mttPTyOY7DwzlOdkP1nxYNqw",      # your client secret
                                     user_agent="Rbot")        # your user agent
@@ -54,8 +71,8 @@ class Rbot:
 
 RedditData = Rbot()
 
-SubRedditName = "poker"
-NumPosts = 2
+SubRedditName = "ucla"
+NumPosts = 1
 # data = [ ["title", "story"] , ["title", "story"] ]
 data = RedditData.ScrapeData(SubRedditName, NumPosts)
 
@@ -115,9 +132,9 @@ for i in range(0, len(data)):
         VideoGenerator1.imageFromText(v,  "image"+ str(i) +"_"+ str(j))
         TextToVoice1.convert_T2V( v, "script"+ str(i) +"_"+ str(j))
     
-    audioFilePath = "C:\\Users\\14088\\Desktop\\Rbot\\VoiceFiles\\"
-    imageFilePath = "C:\\Users\\14088\\Desktop\\Rbot\\ImageFiles\\"
-    videoFilePath = "C:\\Users\\14088\\Desktop\\Rbot\\VideoFiles\\"
+    audioFilePath = "VoiceFiles\\"
+    imageFilePath = "ImageFiles\\"
+    videoFilePath = "VideoFiles\\"
     '''
     for j in range(0, len(imageNameList)):
 
@@ -129,18 +146,18 @@ for i in range(0, len(data)):
         videoFilesList.append(videoFilePath + "video"+ str(j) + ".mp4")
         VideoGenerator1.add_static_image_to_audio( imageFilePath + imageNameList[j] + ".png", audioFilePath + audiofileName[j] + ".mp3", videoFilePath + "video"+ str(j) + ".mp4")
 
-    VideoGenerator1.conbineAllVideos(videoFilesList, "C:\\Users\\14088\\Desktop\\Rbot\\FinishedVideos_tiktok\\tiktok" + str(i+1) + ".mp4")
+    VideoGenerator1.conbineAllVideos(videoFilesList, "FinishedVideos_tiktok\\tiktok" + str(i+1) + ".mp4")
     # PRUGE ALL FILES CREATED
 
 
-    files = glob.glob('C:\\Users\\14088\\Desktop\\Rbot\\VideoFiles\\*')
+    files = glob.glob('VideoFiles\\*')
     for f in files:
         os.remove(f)
-    files = glob.glob('C:\\Users\\14088\\Desktop\\Rbot\\VoiceFiles\\*')
+    files = glob.glob('VoiceFiles\\*')
     for f in files:
         os.remove(f)
 
-    files = glob.glob('C:\\Users\\14088\\Desktop\\Rbot\\ImageFiles\\*')
+    files = glob.glob('ImageFiles\\*')
     for f in files:
         os.remove(f)
 

@@ -2,6 +2,7 @@ from typing import Text
 from scrapeRedditOOP import ScrapReddit
 from TextToVoiceOOP import TextToVoice
 from moviePyOOP import VideoGenerator
+from TikTokVoiceOOP import TikTokVoice
 import praw
 import json
 from datetime import date
@@ -71,8 +72,8 @@ class Rbot:
 
 RedditData = Rbot()
 
-SubRedditName = "ucla"
-NumPosts = 1
+SubRedditName = "UCLA"
+NumPosts = 5
 # data = [ ["title", "story"] , ["title", "story"] ]
 data = RedditData.ScrapeData(SubRedditName, NumPosts)
 
@@ -122,7 +123,12 @@ for i in range(0, len(data)):
 
     imageNameList = []
     audiofileName = []
-    TextToVoice1 = TextToVoice()
+    #TextToVoice1 = TextToVoice()
+    TikTokVoice1 = TikTokVoice()
+    audioFilePath = "VoiceFiles\\"
+    imageFilePath = "ImageFiles\\"
+    videoFilePath = "VideoFiles\\"
+
     VideoGenerator1 = VideoGenerator()
     for j,v in enumerate(script):
 
@@ -130,11 +136,14 @@ for i in range(0, len(data)):
         imageNameList.append("image"+ str(i) +"_"+ str(j))
         audiofileName.append("script"+ str(i) +"_"+ str(j))
         VideoGenerator1.imageFromText(v,  "image"+ str(i) +"_"+ str(j))
-        TextToVoice1.convert_T2V( v, "script"+ str(i) +"_"+ str(j))
+        #def convert_T2V(self, text, filename)
+        #TextToVoice1.convert_T2V( v, "script"+ str(i) +"_"+ str(j))
+        TikTokVoice1.setName(audioFilePath + "script"+ str(i) +"_"+ str(j) + ".wav")
+        TikTokVoice1.setText(v)
+        TikTokVoice1.GenerateMP3()
+        #VideoGenerator1.monoToStereo(audioFilePath + "script"+ str(i) +"_"+ str(j) + ".wav")
     
-    audioFilePath = "VoiceFiles\\"
-    imageFilePath = "ImageFiles\\"
-    videoFilePath = "VideoFiles\\"
+
     '''
     for j in range(0, len(imageNameList)):
 
@@ -144,11 +153,11 @@ for i in range(0, len(data)):
     videoFilesList = []
     for j in range(0, len(imageNameList)):
         videoFilesList.append(videoFilePath + "video"+ str(j) + ".mp4")
-        VideoGenerator1.add_static_image_to_audio( imageFilePath + imageNameList[j] + ".png", audioFilePath + audiofileName[j] + ".mp3", videoFilePath + "video"+ str(j) + ".mp4")
+        VideoGenerator1.add_static_image_to_audio( imageFilePath + imageNameList[j] + ".png", audioFilePath + audiofileName[j] + ".wav", videoFilePath + "video"+ str(j) + ".mp4")
+        
 
     VideoGenerator1.conbineAllVideos(videoFilesList, "FinishedVideos_tiktok\\tiktok" + str(i+1) + ".mp4")
     # PRUGE ALL FILES CREATED
-
 
     files = glob.glob('VideoFiles\\*')
     for f in files:
@@ -160,13 +169,6 @@ for i in range(0, len(data)):
     files = glob.glob('ImageFiles\\*')
     for f in files:
         os.remove(f)
-
-
-
-
-
-
-
 
 
 

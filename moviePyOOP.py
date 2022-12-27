@@ -2,6 +2,7 @@ from moviepy.editor import *
 from scrapeRedditOOP import ScrapReddit
 from TextToVoiceOOP import TextToVoice
 
+from pydub import AudioSegment
 
 class VideoGenerator:
     
@@ -63,7 +64,15 @@ class VideoGenerator:
         video_clip.duration = audio_clip.duration
         video_clip.fps = 1
         video_clip.write_videofile(output_path)
-    
+    '''
+    def monoToStereo(self, audio_path):
+        print("audio_path", audio_path)
+        left_channel = AudioSegment.from_wav(audio_path)
+        right_channel = AudioSegment.from_wav(audio_path)
+
+        stereo_sound = AudioSegment.from_mono_audiosegments(left_channel, right_channel)
+        stereo_sound.export(audio_path, format="wav")
+    '''
         
     def conbineAllVideos(self, VideoFileNameList, name):
         clipList = []

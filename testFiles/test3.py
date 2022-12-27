@@ -1,5 +1,12 @@
-import sys
-import requests, base64, random, argparse, os, playsound, time, re, textwrap
-print(sys.executable)
+import glob,os
 
-# C:\Users\14088\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\python.exe
+files = glob.glob('VideoFiles\\*')
+for f in files:
+    os.remove(f)
+files = glob.glob('VoiceFiles\\*')
+for f in files:
+    os.remove(f)
+
+files = glob.glob('ImageFiles\\*')
+for f in files:
+    os.remove(f)

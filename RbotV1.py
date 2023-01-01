@@ -3,6 +3,7 @@ from scrapeRedditOOP import ScrapReddit
 from TextToVoiceOOP import TextToVoice
 from moviePyOOP import VideoGenerator
 from TikTokVoiceOOP import TikTokVoice
+from RbotOOP import Rbot
 import praw
 import json
 from datetime import date
@@ -10,116 +11,22 @@ from datetime import datetime
 import time
 import os
 import glob
-class Rbot:
-    def __init__(self):
-        pass
-
-    def ScrapeData(self, SubRedditName, NumPosts):
-        askCorrectDirectory = input("Confirm that your current directory is /Rbot/? y/n")
-        if askCorrectDirectory == "y":
-            if not(os.path.exists("ScriptFiles")):
-                os.mkdir("ScriptFiles")
-            if not(os.path.exists("VoiceFiles")):
-                os.mkdir("VoiceFiles")
-            if not(os.path.exists("ImageFiles")):
-                os.mkdir("ImageFiles")
-            if not(os.path.exists("VideoFiles")):
-                os.mkdir("VideoFiles")
-            if not(os.path.exists("FinishedVideos_tiktok")):
-                os.mkdir("FinishedVideos_tiktok")
-        else:
-            print("Cahnge your file location stuppid")
-            quit()
-
-
-        DataFileName = "ScriptFiles\\" + "Reddit_" + SubRedditName + "_Data.json"
-        reddit_read_only = praw.Reddit(client_id="1LUhfALD3uJgbBeFVFMOGQ",         # your client id
-                                    client_secret="46QJC2mttPTyOY7DwzlOdkP1nxYNqw",      # your client secret
-                                    user_agent="Rbot")        # your user agent
-        post = ScrapReddit()
-        post.set_Subreddit(SubRedditName)
-        subreddit = reddit_read_only.subreddit(post.get_Subreddit())
-
-        postList = []
-        for i in subreddit.hot(limit=NumPosts):
-            data = []
-            data.append(i.title)
-            data.append(i.selftext)
-            postList.append(data)
-        #print("postList", type(postList))
-  
-        #postList = [["[Mod Post] post0", "post0 content"],["[Breaking News] post1", "post1 content"],["post2", "post2 content"],["post3", "post3 content"],["post4", "post4 content"]]
-
-        postList = post.removePost(postList, "[Mod Post]")
-        postList = post.removePost(postList, "[Breaking News]")
-
-        for i in range(0, len(postList)):
-            postList[i][1] = post.replaceCharacters("\n", " ", postList[i][1])
-
-
-        print("Created: ", DataFileName)
-        with open(DataFileName, 'w') as f:
-            json.dump(postList, f)
-
-        return postList
-
-    def CreateAudioFileName(self):
-        today = date.today()
-        now = datetime.now()
-        current_time = now.strftime("%H:%M:%S")
-        return "story_" + str(current_time) + " " + str(today) 
-
 
 RedditData = Rbot()
 
 SubRedditName = "UCLA"
-NumPosts = 5
+NumPosts = 1
 # data = [ ["title", "story"] , ["title", "story"] ]
 data = RedditData.ScrapeData(SubRedditName, NumPosts)
 
 script = []
 for i in range(0, len(data)):
     
-
-    title = data[i][0]
-    title = title.split()
-    titleWordCounter = 0
-    FinalTitle = ""
-    for j,v in enumerate(title):
-        if titleWordCounter == 5 or v == len(title)-1:
-            FinalTitle += "\n"
-            titleWordCounter = 0
-        FinalTitle += v + " "
-        titleWordCounter += 1
-
-    print("Title",title)
-
-
-
-    script.append(FinalTitle) # appending title as an element
-
-
-
-    print(i)
-    wordsList = data[i][1].split()
-    counter = 0
-    AppendList = []
-    for j,v in enumerate(wordsList):
-        AppendList.append(v)
-        if counter == 10 or j == len(wordsList)-1:
-            
-            appendStr = ""
-            for x in AppendList:
-                appendStr += x + " "  
-            script.append(appendStr)
-            AppendList = []
-            appendStr = ""
-
-            counter = 0
-        if counter == 5:
-            AppendList.append("\n")
-
-        counter += 1
+    print("data: ", data)
+    FinalTitle = RedditData.titleFormater(data[i][0], 5)
+    script = RedditData.ScriptSpliter(data[i][1], ".", 20)
+    script.insert(0, FinalTitle)
+    print("script:", script)
 
     imageNameList = []
     audiofileName = []
@@ -138,22 +45,17 @@ for i in range(0, len(data)):
         VideoGenerator1.imageFromText(v,  "image"+ str(i) +"_"+ str(j))
         #def convert_T2V(self, text, filename)
         #TextToVoice1.convert_T2V( v, "script"+ str(i) +"_"+ str(j))
-        TikTokVoice1.setName(audioFilePath + "script"+ str(i) +"_"+ str(j) + ".wav")
+        TikTokVoice1.setName(audioFilePath + "script"+ str(i) +"_"+ str(j) + ".mp3")
         TikTokVoice1.setText(v)
         TikTokVoice1.GenerateMP3()
         #VideoGenerator1.monoToStereo(audioFilePath + "script"+ str(i) +"_"+ str(j) + ".wav")
-    
+     
 
-    '''
-    for j in range(0, len(imageNameList)):
 
-        print(VideoGenerator1.getLengthAudioFile(audioFilePath + audiofileName[j] + ".mp3"))
-
-    '''
     videoFilesList = []
     for j in range(0, len(imageNameList)):
         videoFilesList.append(videoFilePath + "video"+ str(j) + ".mp4")
-        VideoGenerator1.add_static_image_to_audio( imageFilePath + imageNameList[j] + ".png", audioFilePath + audiofileName[j] + ".wav", videoFilePath + "video"+ str(j) + ".mp4")
+        VideoGenerator1.add_static_image_to_audio( imageFilePath + imageNameList[j] + ".png", audioFilePath + audiofileName[j] + ".mp3", videoFilePath + "video"+ str(j) + ".mp4")
         
 
     VideoGenerator1.conbineAllVideos(videoFilesList, "FinishedVideos_tiktok\\tiktok" + str(i+1) + ".mp4")
@@ -165,14 +67,9 @@ for i in range(0, len(data)):
     files = glob.glob('VoiceFiles\\*')
     for f in files:
         os.remove(f)
-
     files = glob.glob('ImageFiles\\*')
     for f in files:
         os.remove(f)
-
-
-
-
 
 
 

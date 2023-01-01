@@ -6,7 +6,6 @@ for f in files:
 files = glob.glob('VoiceFiles\\*')
 for f in files:
     os.remove(f)
-
 files = glob.glob('ImageFiles\\*')
 for f in files:
     os.remove(f)

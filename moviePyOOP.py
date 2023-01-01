@@ -11,7 +11,7 @@ class VideoGenerator:
         self.font="Lane"
         self.color="White"
         self.bg_color="green" 
-        self.fontsize=60
+        self.fontsize=20
     def getFontsize(self):
         return self.fontsize
     def setFontsize(self, initFontsize): 
@@ -59,11 +59,14 @@ class VideoGenerator:
     def add_static_image_to_audio(self, image_path, audio_path, output_path):
 
         audio_clip = AudioFileClip(audio_path)
-        image_clip = ImageClip(image_path)
-        video_clip = image_clip.set_audio(audio_clip)
-        video_clip.duration = audio_clip.duration
-        video_clip.fps = 1
-        video_clip.write_videofile(output_path)
+        image_clip = ImageClip(image_path).set_duration(audio_clip.duration)
+        image_clip = image_clip.set_audio(audio_clip)
+        image_clip.write_videofile(output_path, fps=24)
+
+
+        image_clip.audio = image_clip.audio.set_start(0.5)
+        image_clip = image_clip.set_end(image_clip.duration -0.5)
+
     '''
     def monoToStereo(self, audio_path):
         print("audio_path", audio_path)
@@ -78,8 +81,10 @@ class VideoGenerator:
         clipList = []
         for i in VideoFileNameList:
             clip = VideoFileClip(i)
+
             clipList.append(clip)
-        concat_clip = concatenate_videoclips(clipList, method="compose")
+
+        concat_clip = concatenate_videoclips(clipList)
         concat_clip.write_videofile(name)
 
     

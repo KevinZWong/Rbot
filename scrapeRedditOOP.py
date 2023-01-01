@@ -79,7 +79,7 @@ class ScrapReddit:
                 potential= ""
                 index = 0
         return finalReturn
-            
+                
 
 
 def main():  

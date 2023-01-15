@@ -1,1 +1,1 @@
-
+oGenerator1.add_static_image_to_audio( imageFilePath + imageNameList[j

@@ -17,7 +17,7 @@ class Rbot:
         pass
 
     def ScrapeData(self, SubRedditName, NumPosts):
-        askCorrectDirectory = input("Confirm that your current directory is /Rbot/? y/n")
+        askCorrectDirectory = input("Confirm that your current directory is /Rbot/? y/n: ")
         if askCorrectDirectory == "y":
             if not(os.path.exists("ScriptFiles")):
                 os.mkdir("ScriptFiles")

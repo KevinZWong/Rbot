@@ -14,7 +14,7 @@ import glob
 
 RedditData = Rbot()
 
-SubRedditName = "UCLA"
+SubRedditName = "anime"
 NumPosts = 1
 # data = [ ["title", "story"] , ["title", "story"] ]
 data = RedditData.ScrapeData(SubRedditName, NumPosts)
@@ -25,6 +25,10 @@ for i in range(0, len(data)):
     print("data: ", data)
     FinalTitle = RedditData.titleFormater(data[i][0], 5)
     script = RedditData.ScriptSpliter(data[i][1], ".", 20)
+    displayScript = []
+    for i in range(0, len(script), 1):
+        script[i] = RedditData.titleFormater(script[i], 10)
+
     script.insert(0, FinalTitle)
     print("script:", script)
 
@@ -70,7 +74,6 @@ for i in range(0, len(data)):
     files = glob.glob('ImageFiles\\*')
     for f in files:
         os.remove(f)
-
 
 
 

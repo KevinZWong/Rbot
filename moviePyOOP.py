@@ -64,8 +64,7 @@ class VideoGenerator:
         image_clip.write_videofile(output_path, fps=24)
 
 
-        image_clip.audio = image_clip.audio.set_start(0.5)
-        image_clip = image_clip.set_end(image_clip.duration -0.5)
+
 
     '''
     def monoToStereo(self, audio_path):
@@ -81,7 +80,8 @@ class VideoGenerator:
         clipList = []
         for i in VideoFileNameList:
             clip = VideoFileClip(i)
-
+            clip.set_fps(24)
+            clip.set_audio_fps(48000)
             clipList.append(clip)
 
         concat_clip = concatenate_videoclips(clipList)

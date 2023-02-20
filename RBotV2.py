@@ -64,7 +64,7 @@ for i in range(0, len(data)):
 
     VideoGenerator1.conbineAllVideos(videoFilesList, "FinishedVideos_tiktok\\tiktok" + str(i+1) + ".mp4")
     # PRUGE ALL FILES CREATED
-    '''
+
     files = glob.glob('VideoFiles\\*')
     for f in files:
         os.remove(f)
@@ -75,7 +75,7 @@ for i in range(0, len(data)):
     for f in files:
         os.remove(f)
 
-    '''
+
 
 
 '''

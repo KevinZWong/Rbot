@@ -81,7 +81,6 @@ class VideoGenerator:
         for i in VideoFileNameList:
             clip = VideoFileClip(i)
             clip.set_fps(24)
-            clip.set_audio_fps(48000)
             clipList.append(clip)
 
         concat_clip = concatenate_videoclips(clipList)

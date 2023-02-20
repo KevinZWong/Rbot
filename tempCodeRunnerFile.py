@@ -1,1 +1,2 @@
-oGenerator1.add_static_image_to_audio( imageFilePath + imageNameList[j
+
+audio_filename = r"C:\Users\14088\Desktop\Projects\Rbot

@@ -180,7 +180,7 @@ class VideoGenerator:
 
         # Iterate through the text list and add text to video clip
         for text, start_time, end_time in text_list:
-            text_clip = TextClip(text, fontsize=self.fontsize, color=self.color, bg_color=(0, 0, 0, 0), transparent=True).set_pos('center').set_duration(end_time - start_time).set_start(start_time)
+            text_clip = TextClip(text, fontsize=self.fontsize, color=self.color, transparent=True).set_pos('center').set_duration(end_time - start_time).set_start(start_time)
             video = CompositeVideoClip([video, text_clip])
 
         # Write the new video file with the added text

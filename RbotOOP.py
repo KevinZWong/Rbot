@@ -16,6 +16,9 @@ class Rbot:
     def __init__(self):
         pass
 
+
+
+
     def ScrapeData(self, SubRedditName, NumPosts):
         askCorrectDirectory = input("Confirm that your current directory is /Rbot/? y/n: ")
         if askCorrectDirectory == "y":
@@ -70,6 +73,88 @@ class Rbot:
         now = datetime.now()
         current_time = now.strftime("%H:%M:%S")
         return "story_" + str(current_time) + " " + str(today) 
+    def ScriptSpliterV2(self, long_string): 
+        # Split the string into individual sentences
+        sentences = []
+        start = 0
+        for i in range(len(long_string)):
+            if long_string[i] in ['.', '!', '?']:
+                sentences.append(long_string[start:i+1])
+                start = i + 1
+
+        # Initialize an empty list to store long sentences
+        long_sentences = []
+
+        # Initialize a variable to store the previous sentence
+        prev_sentence = ''
+
+        # Iterate over the sentences and check if they have more than 10 words
+        for i in range(len(sentences)):
+            sentence = sentences[i].strip()
+            words = sentence.split()
+
+            if len(words) > 30:
+                # If the sentence has more than 30 words, split it in half and add each half as a separate sentence
+                words_per_half = len(words) // 2
+                first_half = ' '.join(words[:words_per_half])
+                second_half = ' '.join(words[words_per_half:])
+                long_sentences.append(first_half.strip())
+                long_sentences.append(second_half.strip())
+            elif len(words) > 10:
+                # If the sentence has between 10 and 30 words, add it to the long sentence list
+                long_sentences.append(sentence)
+                if prev_sentence:
+                    long_sentences[-2] += ' ' + prev_sentence.strip()
+                prev_sentence = ''
+            else:
+                # If the sentence has fewer than 10 words, add it to the next sentence
+                if i < len(sentences) - 1:
+                    next_sentence = sentences[i+1].strip()
+                    long_sentences.append(sentence + ' ' + next_sentence)
+                    prev_sentence = ''
+                else:
+                    # If this is the last sentence, add it to the long sentence list
+                    long_sentences.append(sentence)
+                    if prev_sentence:
+                        long_sentences[-1] = prev_sentence.strip() + ' ' + long_sentences[-1]
+                    prev_sentence = ''
+
+        # Remove any empty elements from the list
+        long_sentences = [s for s in long_sentences if s]
+
+        return long_sentences
+    
+    def audioScriptSplitter(self, long_string, maxCharCount):
+        punctuation = [".", "!", "?"]
+        sentences = []
+        start = 0
+        for i in range(len(long_string)):
+            if long_string[i] in punctuation:
+                sentence = long_string[start:i+1]
+                if len(sentence) <= maxCharCount:
+                    if sentences and len(sentences[-1]) + len(sentence) <= maxCharCount:
+                        sentences[-1] += sentence
+                    else:
+                        sentences.append(sentence.strip())
+                else:
+                    temp = sentence
+                    while len(temp) > maxCharCount:
+                        index = temp[:maxCharCount].rfind(" ")
+                        sentences.append(temp[:index].strip())
+                        temp = temp[index:].strip()
+                    sentences.append(temp.strip())
+                start = i + 1
+
+        if start < len(long_string):
+            last_sentence = long_string[start:].strip()
+            if last_sentence:
+                if sentences and len(sentences[-1]) + len(last_sentence) <= maxCharCount:
+                    sentences[-1] += last_sentence
+                else:
+                    sentences.append(last_sentence)
+        return sentences
+        
+        
 
     def ScriptSpliter(self, string1, split1, MaxSegmentLen): # brain of program
 
@@ -104,6 +189,8 @@ class Rbot:
                 FinalScriptV2.append(temp1)
             FinalScriptV2.pop(len(FinalScriptV2) -1)
 
+
+
         return FinalScriptV2
     def titleFormater(self, title, rowWordCount):
         title = title.split()
@@ -116,3 +203,20 @@ class Rbot:
             FinalTitle += v + " "
             titleWordCounter += 1
         return FinalTitle
+    
+    def ExtractSegmentStartEnd(self, regcognitionOutput, Script):
+        NumWords = -1
+        indexes = []
+        finalList = []
+        for i in Script:
+            segment = i.split()
+            indexes.append(NumWords + 1)
+            NumWords += len(segment)
+            indexes.append(NumWords)
+
+        for i in range(0, len(indexes), 2):
+            finalList.append([regcognitionOutput[indexes[i]][1], regcognitionOutput[indexes[i+1]][2]])
+        for i in range(0, len(finalList), 1):
+            finalList[i].insert(0, Script[i])
+        # finalList = [["script segment here", starttime, endtime],["script segment here", starttime, endtime]]
+        return finalList

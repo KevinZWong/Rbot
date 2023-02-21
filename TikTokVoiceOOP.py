@@ -65,7 +65,7 @@ class TikTokVoice:
     ]
 
     def __init__(self):
-        self.voice = "en_us_010"
+        self.voice = "en_us_007"
         self.text = "Hello World"
         self.session = "619feb64a93c6c4cf05bd49de9402282"
         self.file = None

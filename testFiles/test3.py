@@ -1,11 +1,7 @@
-import glob,os
 
-files = glob.glob('VideoFiles\\*')
-for f in files:
-    os.remove(f)
-files = glob.glob('VoiceFiles\\*')
-for f in files:
-    os.remove(f)
-files = glob.glob('ImageFiles\\*')
-for f in files:
-    os.remove(f)
+
+
+String1 = "testing. zhjkfhdkjf df sdf sdf sdf. hi there how are you dh my name is kevin ndfj fsdkfjklsdfj klsdfj sdklj."
+
+String1.split()
+

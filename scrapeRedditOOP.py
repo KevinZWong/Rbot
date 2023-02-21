@@ -33,8 +33,7 @@ class ScrapReddit:
         for i in returnIndexs:
             returnValues.append(postList[i])
         return returnValues
-        
-
+    
     def replaceWords(self, search, replacement, wordsString):
         wordsList = wordsString.split()
         if search in wordsList:
@@ -56,7 +55,33 @@ class ScrapReddit:
         for i in wordsList:
             returnValue += i
         return returnValue
+    def replaceAcronyms(self, script):
+        acronyms = [
+            ['FU', 'fuck up'],
+            ['AFAIK', 'As far as I know'],
+            ['AMA', 'Ask Me Anything'],
+            ['CMV', 'Change My View'],
+            ['DAE', 'Does Anyone Else'],
+            ['ELI5', 'Explain Like I\'m 5'],
+            ['FTFY', 'Fixed That For You'],
+            ['IAMA', 'I Am A'],
+            ['IMO', 'In My Opinion'],
+            ['ITT', 'In This Thread'],
+            ['MRW', 'My Reaction When'],
+            ['NSFW', 'Not Safe For Work'],
+            ['OC', 'Original Content'],
+            ['OP', 'Original Poster'],
+            ['PSA', 'Public Service Announcement'],
+            ['TIL', 'Today I Learned'],
+            ['TL;DR', 'Too Long; Didn\'t Read'],
+            ['TLDR', 'Too Long; Didn\'t Read'],
+            ['YMMV', 'Your Mileage May Vary'],
+            ['FU', 'fuck up'] 
 
+        ]
+        for i in range(0, len(acronyms)):
+            script = self.replaceWords(acronyms[i][0], acronyms[i][1], script)
+        return script
 
     def replaceCharacters(self, search, replacement, wordsString): #USE WITH CAUTION
         wordsChar = list(wordsString)

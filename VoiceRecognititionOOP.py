@@ -119,9 +119,15 @@ class VoiceRecognitition:
             returnList.append([word.getWord(), word.getStartTime(),word.getEndTime()])
 
         return returnList
+    
 
+
+'''
 wordtest = VoiceRecognitition()
-audio_filename = r"C:\Users\14088\Desktop\Projects\Rbot\VoiceFiles\script21_0 (1).wav"
+audio_filename = r""
 
 # [[word, start, end], [word, start, end], [word, start, end]]
 print(wordtest.recognize(audio_filename))
+'''
+
+

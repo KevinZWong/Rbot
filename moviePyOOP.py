@@ -7,6 +7,7 @@ import subprocess
 import random
 from moviepy.editor import VideoFileClip, concatenate_videoclips
 from moviepy.video.io.VideoFileClip import VideoFileClip
+import concurrent.futures
 class VideoGenerator:
     
     def __init__(self):
@@ -14,7 +15,8 @@ class VideoGenerator:
         self.font="Lane"
         self.color="White"
         self.bg_color=(0, 0, 0, 0)
-        self.fontsize=20
+        self.fontsize=15
+        
     def getFontsize(self):
         return self.fontsize
     def setFontsize(self, initFontsize): 
@@ -90,62 +92,35 @@ class VideoGenerator:
 
 
     def generateBackgroundFootage(self, final_duration, folder_name, final_path):
-        def select_random_video(videos, used_videos):
-            # Select a random video from the list of available videos
-            video = random.choice(videos)
+        # Get list of video file names in folder
+        video_filenames = [f for f in os.listdir(folder_name) if f.endswith('.mp4')]
 
-            # If the selected video has been used before, select a different video
-            while video in used_videos:
-                video = random.choice(videos)
-
-            # Add the selected video to the list of used videos
-            used_videos.append(video)
-
-            return video
-        # Folder name
-
-        # List to hold the file names
-        file_names = []
-
-        # Loop through the files in the folder
-        for file_name in os.listdir(folder_name):
-            # Check if the file is a regular file (not a directory)
-            if os.path.isfile(os.path.join(folder_name, file_name)):
-                # Add the file name to the list
-                file_names.append(folder_name + file_name)
-
-
-        # Initialize an empty list to store the clips
-        clips = []
-
-        # Initialize an empty list to store the used videos
-        used_videos = []
-
-        # Select and concatenate clips until the duration is reached
+        # Choose random video clips until final_duration is reached
+        selected_clips = []
         total_duration = 0
+        used_filenames = set()
         while total_duration < final_duration:
-            # Select a random video from the list of available videos
-            video = select_random_video(file_names, used_videos)
+            # Select a random video that hasn't been used before
+            unused_filenames = list(set(video_filenames) - used_filenames)
+            if not unused_filenames:
+                break
+            random_filename = random.choice(unused_filenames)
+            video_path = os.path.join(folder_name, random_filename)
 
-            # Load the selected video clip
-            clip = VideoFileClip(video)
+            # Trim the video to the desired length
+            duration = min(final_duration - total_duration, VideoFileClip(video_path).duration)
+            video_clip = VideoFileClip(video_path).subclip(0, duration)
+            selected_clips.append(video_clip)
 
-            # Trim the clip to the desired duration or the remaining time available
-            remaining_duration = final_duration - total_duration
-            clip_duration = min(clip.duration, remaining_duration)
-            clip = clip.subclip(0, clip_duration)
+            # Update the total duration and set of used filenames
+            total_duration += video_clip.duration
+            used_filenames.add(random_filename)
 
-            # Add the trimmed clip to the list of clips
-            clips.append(clip)
+        # Concatenate the selected clips
+        final_clip = concatenate_videoclips(selected_clips)
 
-            # Update the total duration
-            total_duration += clip_duration
-
-        # Concatenate the clips
-        final_clip = concatenate_videoclips(clips)
-        # Export the final video to a file
-        final_clip.write_videofile(final_path)
-
+        # Save the final clip to the specified folder
+        final_clip.write_videofile(final_path, fps=30)
   
     def combine_audio_files(self, file_list, output_file):
         # Combine the audio files into a single file
@@ -191,6 +166,31 @@ class VideoGenerator:
 
         return output_path
 
+    def add_text_to_video_multithreading(self, video_path, text_list, output_path):
+        # Load the video file
+        video = VideoFileClip(video_path)
+
+        # Define a function to add text to a single clip
+        def add_text_to_clip(text, start_time, end_time):
+            text_clip = TextClip(text, fontsize=30, color='white', bg_color='transparent').set_pos('center').set_duration(end_time - start_time).set_start(start_time)
+            return CompositeVideoClip([video.subclip(start_time, end_time), text_clip])
+
+        # Use concurrent.futures to process the text clips in parallel
+        clips = []
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            futures = [executor.submit(add_text_to_clip, text, start_time, end_time) for text, start_time, end_time in text_list]
+            for future in concurrent.futures.as_completed(futures):
+                clips.append(future.result())
+
+        # Combine the clips into a single video
+        final_clip = concatenate_videoclips(clips)
+
+        # Write the new video file with the added text
+        final_clip.write_videofile(output_path, codec='libx264', temp_audiofile='temp-audio.m4a', remove_temp=True, audio_codec='aac')
+
+        # Close the video clips
+        video.close()
+        final_clip.close()
 '''        
 def main():
     video1 = VideoGenerator()

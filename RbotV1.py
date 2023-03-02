@@ -14,7 +14,7 @@ import glob
 
 RedditData = Rbot()
 
-SubRedditName = "AskReddit"
+SubRedditName = "AmItheAsshole"
 NumPosts = 1
 # data = [ ["title", "story"] , ["title", "story"] ]
 data = RedditData.ScrapeData(SubRedditName, NumPosts)

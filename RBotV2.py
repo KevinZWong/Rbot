@@ -17,13 +17,17 @@ import glob
 
 RedditData = Rbot()
 
-SubRedditName = "storytime"
-NumPosts = 1
+SubRedditName = "AmItheAsshole"
+NumPosts = 5
 # data = [ ["title", "story"] , ["title", "story"] ]
-data = RedditData.ScrapeData(SubRedditName, NumPosts)
+dataTemp = RedditData.ScrapeData(SubRedditName, NumPosts)
+data1 = RedditData.filter(dataTemp, 1000)
+data = RedditData.manualSelection(data1)
+
 audioFilePath = "VoiceFiles\\"
 imageFilePath = "ImageFiles\\"
 videoFilePath = "VideoFiles\\"
+FinishedPath = "FinishedVideos\\"
 script = []
 
 for i in range(0, len(data)):
@@ -39,9 +43,9 @@ for i in range(0, len(data)):
     FinalTitle = RedditData.titleFormater(data[i][0], 5)
     script = RedditData.ScriptSpliterV2(data[i][1])
     for i in range(0, len(script), 1):
-        script[i] = RedditData.titleFormater(script[i], 10)
+        script[i] = RedditData.titleFormater(script[i], 6)
 
-    script.insert(0, Title)
+    script.insert(0, FinalTitle)
     print(script)
     
     audioScript = RedditData.audioScriptSplitter(rawStory, 250)
@@ -65,12 +69,6 @@ for i in range(0, len(data)):
     VideoGenerator1.cropVideo(videoFilePath + "background.mp4", videoFilePath + "backgroundCroped.mp4")
     StartEndTimesList = RedditData.ExtractSegmentStartEnd(regcognitionOutput, script)
     VideoGenerator1.overlay_audio_video(videoFilePath + "backgroundCroped.mp4", audioFilePath + SubRedditName + ".wav", videoFilePath + "CropedAudio.mp4", audioFileLength)
-    VideoGenerator1.add_text_overlay(videoFilePath + "CropedAudio.mp4", StartEndTimesList, videoFilePath +  "Finished" + SubRedditName + ".mp4", )
+    VideoGenerator1.add_text_overlay(videoFilePath + "CropedAudio.mp4", StartEndTimesList, FinishedPath + SubRedditName + str(int(time.time())) +".mp4", )
 
 
-
-    
-
-    
-
-    

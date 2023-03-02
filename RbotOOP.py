@@ -30,8 +30,8 @@ class Rbot:
                 os.mkdir("ImageFiles")
             if not(os.path.exists("VideoFiles")):
                 os.mkdir("VideoFiles")
-            if not(os.path.exists("FinishedVideos_tiktok")):
-                os.mkdir("FinishedVideos_tiktok")
+            if not(os.path.exists("FinishedVideos")):
+                os.mkdir("FinishedVideos")
         else:
             print("Cahnge your file location stuppid")
             quit()
@@ -67,7 +67,23 @@ class Rbot:
             json.dump(postList, f)
 
         return postList
+    def filter(self, data, maxWords):
+        returnList = []
+        for i in data:
+            split1 = i[1].split()
 
+            if (len(split1) <= maxWords):
+                returnList.append(i)
+        return returnList
+    def manualSelection(self, data):
+        returnList = []
+        for story in data:
+            print(story[0])
+            print(story[1])
+            input1 = input("Y or N: ")
+            if (input1.upper() == "Y"):
+                returnList.append(story)
+        return returnList
     def CreateAudioFileName(self):
         today = date.today()
         now = datetime.now()
@@ -205,17 +221,28 @@ class Rbot:
         return FinalTitle
     
     def ExtractSegmentStartEnd(self, regcognitionOutput, Script):
-        NumWords = -1
+        NumWords = 0
         indexes = []
         finalList = []
+
+        ### something wrong here rewrite
         for i in Script:
             segment = i.split()
-            indexes.append(NumWords + 1)
-            NumWords += len(segment)
             indexes.append(NumWords)
-
-        for i in range(0, len(indexes), 2):
-            finalList.append([regcognitionOutput[indexes[i]][1], regcognitionOutput[indexes[i+1]][2]])
+            NumWords += len(segment)
+            indexes.append(NumWords-1)
+        ### something wrong here rewrite ## trying to acesss stuff past script
+        tempListIndexes = []
+        flip = 1
+        for i in range(0, len(indexes), 1):
+            tempListIndexes.append(regcognitionOutput[indexes[i]][flip])
+            if (flip == 1):
+                flip = 2
+            else:
+                finalList.append(tempListIndexes)
+                tempListIndexes= []
+                flip = 1
+            #finalList.append([regcognitionOutput[indexes[i-1]][1], regcognitionOutput[indexes[i]][2]])
         for i in range(0, len(finalList), 1):
             finalList[i].insert(0, Script[i])
         # finalList = [["script segment here", starttime, endtime],["script segment here", starttime, endtime]]

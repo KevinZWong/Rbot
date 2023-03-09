@@ -191,6 +191,8 @@ class VideoGenerator:
         # Close the video clips
         video.close()
         final_clip.close()
+
+
 '''        
 def main():
     video1 = VideoGenerator()

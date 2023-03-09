@@ -67,6 +67,9 @@ for i in range(0, len(data)):
     audioFileLength = VideoGenerator1.getLengthAudioFile(audioFilePath + SubRedditName + ".wav")
     VideoGenerator1.generateBackgroundFootage(audioFileLength, 'C://Users//14088//Videos//ValoClips//', videoFilePath + "background.mp4")
     VideoGenerator1.cropVideo(videoFilePath + "background.mp4", videoFilePath + "backgroundCroped.mp4")
+    print("regcognitionOutput: ",regcognitionOutput)
+    print("script: ",script)
+
     StartEndTimesList = RedditData.ExtractSegmentStartEnd(regcognitionOutput, script)
     VideoGenerator1.overlay_audio_video(videoFilePath + "backgroundCroped.mp4", audioFilePath + SubRedditName + ".wav", videoFilePath + "CropedAudio.mp4", audioFileLength)
     VideoGenerator1.add_text_overlay(videoFilePath + "CropedAudio.mp4", StartEndTimesList, FinishedPath + SubRedditName + str(int(time.time())) +".mp4", )

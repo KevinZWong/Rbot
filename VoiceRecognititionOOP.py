@@ -44,6 +44,7 @@ class VoiceRecognitition:
 
         #https://alphacephei.com/vosk/models
         self.model_path = r"C:\Users\14088\Downloads\vosk-model-small-en-us-0.15\vosk-model-small-en-us-0.15"
+        self.model_path = r"C:\Users\14088\Desktop\vosk-model-en-us-0.42-gigaspeech\vosk-model-en-us-0.42-gigaspeech"
     
 
     def recognize(self, audio_filename):       

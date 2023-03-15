@@ -31,11 +31,12 @@ FinishedPath = "FinishedVideos\\"
 script = []
 
 for i in range(0, len(data)):
-    '''
-    post = ScrapReddit()
-    data[i][1] = post.replaceAcronyms(data[i][1])
-    data[i][0] = post.replaceAcronyms(data[i][0])
-    '''
+    #post script processing
+    data[i][1] = RedditData.replace_acronyms(data[i][1])
+    data[i][0] = RedditData.replace_acronyms(data[i][0])
+    data[i][0] = RedditData.ScriptProcessing(data[i][0])
+    ############
+
 
     rawStory = data[i][1]
     Title = data[i][0]
@@ -64,6 +65,11 @@ for i in range(0, len(data)):
     # find which time each word is spoken
     VoiceRecognitition1 = VoiceRecognitition()
     regcognitionOutput = VoiceRecognitition1.recognize(audioFilePath + SubRedditName + ".wav")
+    RegOutout_string = VoiceRecognitition1.regcognitionOutput_string(regcognitionOutput)
+
+    
+
+    regcognitionOutput = RedditData.ScriptProcessing(data[i][0])
     audioFileLength = VideoGenerator1.getLengthAudioFile(audioFilePath + SubRedditName + ".wav")
     VideoGenerator1.generateBackgroundFootage(audioFileLength, 'C://Users//14088//Videos//ValoClips//', videoFilePath + "background.mp4")
     VideoGenerator1.cropVideo(videoFilePath + "background.mp4", videoFilePath + "backgroundCroped.mp4")

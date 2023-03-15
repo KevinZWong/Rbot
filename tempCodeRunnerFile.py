@@ -1,1 +1,2 @@
-c
+
+NumPosts = 5

@@ -222,6 +222,14 @@ class Rbot:
     
     def ExtractSegmentStartEnd(self, regcognitionOutput, Script):
 
+        #############################################################################
+        #############################################################################
+        # ERROR PREVENTION
+        duplicate_list = list(regcognitionOutput)
+        regcognitionOutput.extend(duplicate_list)
+        #############################################################################
+        #############################################################################
+
         NumWords = 0
         indexes = []
         finalList = []
@@ -248,8 +256,11 @@ class Rbot:
             #finalList.append([regcognitionOutput[indexes[i-1]][1], regcognitionOutput[indexes[i]][2]])
         for i in range(0, len(finalList), 1):
             finalList[i].insert(0, Script[i])
+        
         # finalList = [["script segment here", starttime, endtime],["script segment here", starttime, endtime]]
         return finalList
+
+
     def regcognitionOutput_string(self, regcognitionOutput):
         for i in regcognitionOutput:
             test1 += i[0] + " "
@@ -257,7 +268,7 @@ class Rbot:
 
     def ScriptProcessing(self, script):
         # Set up OpenAI API credentials
-        openai.api_key = "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"
+        openai.api_key = "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"
 
         # Set up the OpenAI GPT-3 model
         model_engine = "text-davinci-002"
@@ -314,6 +325,15 @@ if __name__ == "__main__":
     print("Script length: ", len(script))
 
     print("regcognitionOutput length: ", len(regcognitionOutput))
+
+    recognized = ""
+    for i in regcognitionOutput:
+        recognized += i[0] + " "
+    print(recognized)
+
+
+
+    
     RedditData = Rbot()
     StartEndTimesList = RedditData.ExtractSegmentStartEnd(regcognitionOutput, script)
     

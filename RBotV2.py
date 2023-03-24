@@ -17,13 +17,18 @@ import glob
 
 RedditData = Rbot()
 
-SubRedditName = "AmItheAsshole"
+SubRedditName = "storytime"
 NumPosts = 5
 # data = [ ["title", "story"] , ["title", "story"] ]
+
+############################## COMMENT OUT FOR DEMO ##################################
+'''
 dataTemp = RedditData.ScrapeData(SubRedditName, NumPosts)
 data1 = RedditData.filter(dataTemp, 1000)
 data = RedditData.manualSelection(data1)
-
+'''
+#################################################################################
+data =  [["The depressed student fails his exam", "Kevin Wong was a hard-working student who always studied diligently for his exams. He never missed a class, took copious notes, and even sought out extra tutoring from his professors. However, despite his best efforts, Kevin still managed to fail his latest exam."]]
 audioFilePath = "VoiceFiles\\"
 imageFilePath = "ImageFiles\\"
 videoFilePath = "VideoFiles\\"
@@ -65,11 +70,9 @@ for i in range(0, len(data)):
     # find which time each word is spoken
     VoiceRecognitition1 = VoiceRecognitition()
     regcognitionOutput = VoiceRecognitition1.recognize(audioFilePath + SubRedditName + ".wav")
-    RegOutout_string = VoiceRecognitition1.regcognitionOutput_string(regcognitionOutput)
-
-    
-
-    regcognitionOutput = RedditData.ScriptProcessing(data[i][0])
+    #RegOutout_string = VoiceRecognitition1.regcognitionOutput_string(regcognitionOutput)
+    print("checkpoint 1")
+    #regcognitionOutput = RedditData.ScriptProcessing(script)
     audioFileLength = VideoGenerator1.getLengthAudioFile(audioFilePath + SubRedditName + ".wav")
     VideoGenerator1.generateBackgroundFootage(audioFileLength, 'C://Users//14088//Videos//ValoClips//', videoFilePath + "background.mp4")
     VideoGenerator1.cropVideo(videoFilePath + "background.mp4", videoFilePath + "backgroundCroped.mp4")

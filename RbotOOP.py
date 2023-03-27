@@ -268,7 +268,7 @@ class Rbot:
 
     def ScriptProcessing(self, script):
         # Set up OpenAI API credentials
-        openai.api_key = "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"
+        openai.api_key = "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"
 
         # Set up the OpenAI GPT-3 model
         model_engine = "text-davinci-002"

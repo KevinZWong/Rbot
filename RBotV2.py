@@ -1,6 +1,5 @@
 from typing import Text
 from scrapeRedditOOP import ScrapReddit
-from TextToVoiceOOP import TextToVoice
 from moviePyOOP import VideoGenerator
 from TikTokVoiceOOP import TikTokVoice
 from VoiceRecognititionOOP import VoiceRecognitition
@@ -39,7 +38,7 @@ for i in range(0, len(data)):
     #post script processing
     data[i][1] = RedditData.replace_acronyms(data[i][1])
     data[i][0] = RedditData.replace_acronyms(data[i][0])
-    data[i][0] = RedditData.ScriptProcessing(data[i][0])
+    #data[i][0] = RedditData.ScriptProcessing(data[i][0])
     ############
 
 
@@ -47,14 +46,14 @@ for i in range(0, len(data)):
     Title = data[i][0]
     print("data: ", data)
     FinalTitle = RedditData.titleFormater(data[i][0], 5)
-    script = RedditData.ScriptSpliterV2(data[i][1])
+    script = RedditData.split_sentences(data[i][1])
     for i in range(0, len(script), 1):
         script[i] = RedditData.titleFormater(script[i], 6)
 
     script.insert(0, FinalTitle)
     print(script)
     
-    audioScript = RedditData.audioScriptSplitter(rawStory, 250)
+    audioScript = RedditData.split_sentences(rawStory)
     audioScript.insert(0, Title)
     print(audioScript)
     audioFileNames = []
@@ -69,18 +68,19 @@ for i in range(0, len(data)):
     VideoGenerator1.combine_audio_files(audioFileNames, audioFilePath + SubRedditName + ".wav")
     # find which time each word is spoken
     VoiceRecognitition1 = VoiceRecognitition()
-    regcognitionOutput = VoiceRecognitition1.recognize(audioFilePath + SubRedditName + ".wav")
+    StartEndTImes = VoiceRecognitition1.get_pauseTimes(audioScript , audioFilePath + SubRedditName + ".wav")
     #RegOutout_string = VoiceRecognitition1.regcognitionOutput_string(regcognitionOutput)
     print("checkpoint 1")
     #regcognitionOutput = RedditData.ScriptProcessing(script)
     audioFileLength = VideoGenerator1.getLengthAudioFile(audioFilePath + SubRedditName + ".wav")
-    VideoGenerator1.generateBackgroundFootage(audioFileLength, 'C://Users//14088//Videos//ValoClips//', videoFilePath + "background.mp4")
+    VideoGenerator1.generateBackgroundFootage(audioFileLength, 'ValoClips//', videoFilePath + "background.mp4")
     VideoGenerator1.cropVideo(videoFilePath + "background.mp4", videoFilePath + "backgroundCroped.mp4")
-    print("regcognitionOutput: ",regcognitionOutput)
+    #print("regcognitionOutput: ",regcognitionOutput)
     print("script: ",script)
 
-    StartEndTimesList = RedditData.ExtractSegmentStartEnd(regcognitionOutput, script)
+    #StartEndTimesList = RedditData.ExtractSegmentStartEnd(regcognitionOutput, script)
     VideoGenerator1.overlay_audio_video(videoFilePath + "backgroundCroped.mp4", audioFilePath + SubRedditName + ".wav", videoFilePath + "CropedAudio.mp4", audioFileLength)
-    VideoGenerator1.add_text_overlay(videoFilePath + "CropedAudio.mp4", StartEndTimesList, FinishedPath + SubRedditName + str(int(time.time())) +".mp4", )
+    VideoGenerator1.add_text_overlay(videoFilePath + "CropedAudio.mp4", StartEndTImes, FinishedPath + SubRedditName + str(int(time.time())) +".mp4", )
 
 
+  

@@ -11,7 +11,7 @@ import time
 import os
 import glob
 import openai
-
+import re
 class Rbot:
     def __init__(self):
         pass
@@ -205,7 +205,22 @@ class Rbot:
                 FinalScriptV2.append(temp1)
             FinalScriptV2.pop(len(FinalScriptV2) -1)
 
+    
 
+    def split_sentences(self, text):
+        sentences = []
+        start = 0
+        for i in range(len(text)):
+            if text[i] in ".!?,":
+                sentence = text[start:i+1].strip()
+                if sentence:
+                    sentences.append(sentence)
+                start = i + 1
+        if start < len(text):
+            sentence = text[start:].strip()
+            if sentence:
+                sentences.append(sentence)
+        return sentences
 
         return FinalScriptV2
     def titleFormater(self, title, rowWordCount):
@@ -268,7 +283,7 @@ class Rbot:
 
     def ScriptProcessing(self, script):
         # Set up OpenAI API credentials
-        openai.api_key = "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"
+        openai.api_key = "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"
 
         # Set up the OpenAI GPT-3 model
         model_engine = "text-davinci-002"

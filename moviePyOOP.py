@@ -120,7 +120,7 @@ class VideoGenerator:
         final_clip = concatenate_videoclips(selected_clips)
 
         # Save the final clip to the specified folder
-        final_clip.write_videofile(final_path, fps=30)
+        final_clip.write_videofile(final_path, fps=30, codec='libx264')
   
     def combine_audio_files(self, file_list, output_file):
         # Combine the audio files into a single file

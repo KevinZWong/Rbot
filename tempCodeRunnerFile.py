@@ -1,2 +1,2 @@
 
-NumPosts = 5
+import glob

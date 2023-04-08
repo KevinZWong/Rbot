@@ -98,7 +98,6 @@ def get_pauseTimes(fileName):
     plt.xlabel('Time (s)')
     plt.ylabel('Amplitude')
     plt.show()
-    
     return timesList
 
     '''

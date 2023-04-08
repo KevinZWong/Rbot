@@ -283,11 +283,11 @@ class Rbot:
 
     def ScriptProcessing(self, script):
         # Set up OpenAI API credentials
-        openai.api_key = "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"
+        openai.api_key = ""
 
         # Set up the OpenAI GPT-3 model
         model_engine = "text-davinci-002"
-        model_prompt = f"Please correct the following paragraph for grammar mistakes:\n{script}\nCorrection:"
+        model_prompt = f"Correct the following paragraph for grammar and punctuation mistakes:\n{script}\nCorrection:"
         # Generate the summary using GPT-3
         response = openai.Completion.create(
             engine=model_engine,

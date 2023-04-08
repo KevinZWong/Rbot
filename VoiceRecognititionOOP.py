@@ -123,7 +123,13 @@ class VoiceRecognitition:
 
         return returnList
     
-    def get_pauseTimes(self, FullScript,fileName):
+    def get_pauseTimes(self, FullScript,fileName, endLength):
+        def format_list(input_list, start_val, end_val):
+            output_list = [[start_val, input_list[0][0]]]
+            for i in range(len(input_list)-1):
+                output_list.append([input_list[i][1], input_list[i+1][0]])
+            output_list.append([input_list[-1][1], end_val])
+            return output_list
         pass
         def get_amplitudes(filename):
             # Open the audio file
@@ -196,7 +202,7 @@ class VoiceRecognitition:
             if counter == 1:
                 times.append(i[0])
                 
-        minPauseLength = 0.2 #seconds
+        minPauseLength = 0.32 #seconds
 
 
         finalReturnTImes = []
@@ -208,34 +214,62 @@ class VoiceRecognitition:
 
         print(timesList)
         print(pauses)
+        popBeginning = False
+        popEnd = False
         for i in range(0,len(timesList)):
             if timesList[i][1] - timesList[i][0] >= minPauseLength:
                 
-                finalReturnTImes.append([FullScript[pauses],timesList[i][0], timesList[i][1]])
+                finalReturnTImes.append([timesList[i][0], timesList[i][1]])
+                #finalReturnTImes.append([timesList[i][0], timesList[i][1]])
                 pauses += 1
-                plt.axvline(x=(timesList[i][1] - timesList[i][0])/2 + timesList[i][0], color='r')
+                #plt.axvline(x=(timesList[i][1] - timesList[i][0])/2 + timesList[i][0], color='r')
+                if ((timesList[i][1] - timesList[i][0])/2 + timesList[i][0] < 1) and i== 0:
+                    popBeginning = True
+                if ((timesList[i][1] - timesList[i][0])/2 + timesList[i][0] > endLength-1) and i == len(timesList) -1:
+                    popEnd = True
+        
         # Create a time array based on the time increment and number of steps
         time_increment = 0.01  # 100ms time increments
         num_steps = len(amplitudes)
         time = np.arange(num_steps) * time_increment
 
         # Plot the amplitudes over time
-
+        '''
         plt.plot(time, amplitudes)
         plt.xlabel('Time (s)')
         plt.ylabel('Amplitude')
         plt.show()
+        '''
+        if (popBeginning):
+            finalReturnTImes.pop(0)
+        if (popEnd):
+            finalReturnTImes.pop[len(finalReturnTImes)-1]
+        if finalReturnTImes ==[]:
+            finalReturnTImes = [0]
+        finalReturnTimes2 = format_list(finalReturnTImes, 0, endLength)
+        for i in range(0, len(FullScript)):
+            finalReturnTimes2[i].insert(0, FullScript[i])
 
-
-
-        return finalReturnTImes
+        
+        
+        return finalReturnTimes2
+    def ScriptSplitterV2_times(self, strings , times):
+        intervals = []
+        current_time = 0
+        for i in range(len(strings)):
+            interval = [strings[i], current_time, current_time + times[i]]
+            intervals.append(interval)
+            current_time += times[i]
+        return intervals
 
 '''
 wordtest = VoiceRecognitition()
-audio_filename = r""
+audio_filename = r"VoiceFiles\storytime.wav"
 
 # [[word, start, end], [word, start, end], [word, start, end]]
-print(wordtest.recognize(audio_filename))
+# #get_pauseTimes(self, FullScript,fileName, endLength)
+FullScript = ['My Neighbour Saw Me Naked ', 'I go to bed naked and \nusually get up and don’t put \nclothes on until after I’ve had \nmy shower. ', 'This morning I forgot I had \nclothes in the washer. ', 'My washer and dryer is located \nin the basement. ', 'My basement has one window you \ncan look out of close to \nthe bottom of the stairs facing \nright next to our neighbours house. ', 'For context I live in a \nduplex/ cul-de-sac subdivision. ', 'The neighbours front porch overlooks the \nbasement window. ', 'I was in my birthday suit \nwalking down the stairs as I \nlooked out the window. ', 'I could see a women standing \nat the front porch. ', 'I’m sure she was looking directly \nat me. ', 'For some reason I awkwardly smiled \nat her but then remembered I’m \nnot wearing anything. ', 'I’m pretty sure she saw everything \nbut I ran down the stairs \nthe last few steps as fast \nas I could after that. ', 'Not thinking of anything other than \nI just flashed my neighbour. ']
+print(wordtest.get_pauseTimes(FullScript, audio_filename, 48.82))
+
+
 '''
-
-
